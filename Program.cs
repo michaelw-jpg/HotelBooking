@@ -82,7 +82,7 @@ namespace HotelBooking
                 
                 if (!DateTime.TryParse(test, out test1) || test1 < DateTime.Now)
                 {
-                    Console.WriteLine("Rätt format kekw eller fel datusm");
+                    Console.WriteLine("Rätt format kekw eller fel datums");
                     continue;
                 }
                 break;
