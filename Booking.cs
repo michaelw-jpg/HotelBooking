@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Numerics;
+using System.Xml.Linq;
 
-public class Booking
+public class Booking : Person
 {
+    private static int _priceperday = 300;
+    private int _totalPrice;
     private string _name;
     private int _days;
     private DateTime _checkIn;
@@ -13,6 +17,13 @@ public class Booking
 
     }
 
+    public Booking(Person person)
+        {
+        _name = person.PName;
+        Email = person.Email;
+        Phone = person.Phone;
+        }
+
     //constructor
     public Booking(string name, int days, DateTime checkin)
     {
@@ -21,6 +32,11 @@ public class Booking
         _checkIn = checkin;
         _checkOut = checkin.AddDays(days);
 
+    }
+    public int PricePerDay 
+    {  
+        get { return _priceperday; }
+        set { _priceperday = value; }
     }
     public string Name
     {
@@ -50,20 +66,20 @@ public class Booking
             _days = value;
         }
     }
-    public void BookingInfo()
+    public void BookingInfo(Person person)
     {
-        int price = 300;
 
         Console.WriteLine($"Guest name : {_name}");
         Console.WriteLine($"Check in Date: {_checkIn.ToShortDateString()}");
-        Console.WriteLine($"You will checkout: {_checkOut.ToShortDateString()}");
-        Console.WriteLine($"Total Price: {price * _days} kr");
+        Console.WriteLine($"Checkout Date: {_checkOut.ToShortDateString()}");
+        Console.WriteLine($"Total Price: {PricePerDay * _days} kr");
+        Console.WriteLine($"\nKontaktuppgifter\nNamn: {person.PName} \nMejladress: {person.Email} \nTelefonnummer: {person.Phone} ");
     }
-    public void GetBookingInfo()
+    public void GetBookingInfo(Person person)
     {
 
-        Console.WriteLine("Ange ditt för och efternamn:");
-        string name = Console.ReadLine();
+        //Console.WriteLine("Ange ditt för och efternamn:");
+       // string name = PName;
         DateTime test1;
         while (true)
         {
@@ -92,9 +108,12 @@ public class Booking
         }
 
         Days = dayz;
-        Name = name;
+        Name = person.PName;
         CheckIn = test1;
         CheckOut = test1.AddDays(dayz);
+        _totalPrice = PricePerDay * dayz;
+       // Console.WriteLine("Summering av bokning:");
+        //BookingInfo();
     }
 
     //method for updating length of stay
@@ -114,6 +133,9 @@ public class Booking
 
         Days = days;
         CheckOut = CheckIn.AddDays(days);
+        _totalPrice = PricePerDay * days;
+        //Console.WriteLine("Uppdaterad bokning: ");
+        //BookingInfo();
 
     }
 

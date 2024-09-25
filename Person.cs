@@ -15,6 +15,23 @@ public class Person
 		_email = email;
 		_PhoneN = phone;
 	}
+
+	public string PName
+	{
+		get { return _name; }
+		set { _name = value; }
+	}
+	public string Email
+	{
+		get { return _email; }
+		set { _email = value; }
+	}
+	public string Phone
+	{
+		get { return _PhoneN; }
+		set { _PhoneN = value; }
+	}
+
 	public void GetPersonInfo()
 	{
 		Console.WriteLine("Ange ditt för och efternamn");
@@ -26,8 +43,8 @@ public class Person
         Console.WriteLine("Ange ditt telefonnummer");
 		string phoneNumber = Console.ReadLine();
 
-		_name = userName;
-		_email = userMail;
-		_PhoneN = phoneNumber;
+		PName = userName;
+		Email = userMail;
+		Phone = phoneNumber;
     }
 }
