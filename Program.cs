@@ -8,11 +8,9 @@ namespace HotelBooking
         static void Main(string[] args)
         {
             HotelBooking bokning = new HotelBooking("Erik", 9, DateTime.Now);
-            HotelBooking Bokning2 = new HotelBooking();
-            var tuple1 = Bokning2.GetUserInfo();
-            Bokning2.Name = tuple1.Item1;
-            Bokning2.Days = tuple1.Item3;
-            Bokning2.CheckIn = tuple1.Item2;
+            HotelBooking bokning2 = new HotelBooking();
+            bokning2.GetUserInfo();
+            bokning2.BookingInfo();
 
 
 
@@ -64,11 +62,14 @@ namespace HotelBooking
         }
         public void BookingInfo()
         {
-            Console.WriteLine($"Guest name : {_days}");
-            Console.WriteLine($"Check in Date: {_checkIn}");
-            Console.WriteLine($"You will checkout: {_checkOut}");
+            //string checkin = { _checkIn.ToShortDateString
+            //string checkout =
+            
+            Console.WriteLine($"Guest name : {_name}");
+            Console.WriteLine($"Check in Date: {_checkIn.ToShortDateString()}");
+            Console.WriteLine($"You will checkout: {_checkOut.ToShortDateString()}");
         }
-        public Tuple<string, DateTime, int> GetUserInfo()
+        public void GetUserInfo()
         {
             
             Console.WriteLine("Ange ditt för och efternamn:");
@@ -99,10 +100,11 @@ namespace HotelBooking
                 }
                 break;
             }
-            Tuple<string,DateTime,int> array = Tuple.Create(name, test1, dayz);
-            
 
-            return array;
+            _days = dayz;
+            _name = name;
+            _checkIn = test1;
+            _checkOut = test1.AddDays(dayz);
         }
 
     }
