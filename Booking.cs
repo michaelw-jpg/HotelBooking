@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class HotelBooking
+public class Booking
 {
     private string _name;
     private int _days;
@@ -8,13 +8,13 @@ public class HotelBooking
     private DateTime _checkOut;
 
     //default
-    public HotelBooking()
+    public Booking()
     {
 
     }
 
     //constructor
-    public HotelBooking(string name, int days, DateTime checkin)
+    public Booking(string name, int days, DateTime checkin)
     {
         _name = name;
         _days = days;
@@ -41,17 +41,25 @@ public class HotelBooking
     public int Days
     {
         get { return _days; }
-        set { _days = value; }
+        set 
+        { 
+            if (value <= 0 )
+            {
+                throw new ArgumentException("Ange en positiv siffra");
+            }
+            _days = value;
+        }
     }
     public void BookingInfo()
     {
-
+        int price = 300;
 
         Console.WriteLine($"Guest name : {_name}");
         Console.WriteLine($"Check in Date: {_checkIn.ToShortDateString()}");
         Console.WriteLine($"You will checkout: {_checkOut.ToShortDateString()}");
+        Console.WriteLine($"Total Price: {price * _days} kr");
     }
-    public void GetUserInfo()
+    public void GetBookingInfo()
     {
 
         Console.WriteLine("Ange ditt för och efternamn:");
@@ -83,8 +91,30 @@ public class HotelBooking
             break;
         }
 
-        _days = dayz;
-        _name = name;
-        _checkIn = test1;
-        _checkOut = test1.AddDays(dayz);
+        Days = dayz;
+        Name = name;
+        CheckIn = test1;
+        CheckOut = test1.AddDays(dayz);
     }
+
+    //method for updating length of stay
+    public void UpdateStayDate()
+    {
+        int days;
+        while (true)
+        { 
+            Console.WriteLine("Ange antal dagar du vill stanna");
+            if(!int.TryParse(Console.ReadLine(), out days) || days < 0)
+            {
+                Console.WriteLine("Ge mig ett positivt heltal");
+                continue;
+            }
+            break;
+        }
+
+        Days = days;
+        CheckOut = CheckIn.AddDays(days);
+
+    }
+
+}
