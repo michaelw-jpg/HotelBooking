@@ -41,6 +41,7 @@ namespace HotelBooking
                         BookEditor(list[answer].Item2);
                         break;
                     case 3:
+                        menu = false;
                         break;
                 }
             }
