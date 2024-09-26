@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace HotelBooking
 {
@@ -7,103 +9,100 @@ namespace HotelBooking
     {
         static void Main(string[] args)
         {
-            HotelBooking bokning = new HotelBooking("Erik", 9, DateTime.Now);
-            HotelBooking Bokning2 = new HotelBooking();
-            var tuple1 = Bokning2.GetUserInfo();
-            Bokning2.Name = tuple1.Item1;
-            Bokning2.Days = tuple1.Item3;
-            Bokning2.CheckIn = tuple1.Item2;
-
-
-
-
-        }
-    }
-    public class HotelBooking
-    {
-        private string _name;
-        private int _days;
-        private DateTime _checkIn;
-        private DateTime _checkOut;
-
-        //default
-        public HotelBooking()
+            List<Tuple<Person, Booking>> list = new List<Tuple<Person, Booking>>();
+            bool menu = true;
+            while (menu)
             {
+                Console.WriteLine("OOP Hotel bokningssystem");
+                Console.WriteLine("[1]Lägg till en Bokning");
+                Console.WriteLine("[2]Visa bokningar/ändra bokningar/avbokning");
+                Console.WriteLine("[3]Avsluta");
+                int.TryParse(Console.ReadLine(), out int menyChoice);
 
+                switch (menyChoice)
+                {
+                    case 1:
+                        Person guest = new Person();
+                        guest.GetPersonInfo();
+                        Booking bokning = new Booking(guest);
+                        bokning.GetBookingInfo(guest);
+                        Tuple<Person, Booking> guestAndBook = Tuple.Create(guest, bokning);
+                        
+                        list.Add(guestAndBook);
+
+                        break;
+                    case 2:
+                        BookingWriter(list);
+                        int.TryParse(Console.ReadLine(), out int answer);
+                        answer--;
+                        if (answer < 0)
+                            break;
+                        list[answer].Item2.BookingInfo();
+                        BookEditor(list[answer].Item2);
+                        break;
+                    case 3:
+                        menu = false;
+                        break;
+                }
             }
-        
-        //constructor
-        public HotelBooking(string name, int days, DateTime checkin)
-        {
-            _name = name;
-            _days = days;
-            _checkIn = checkin;
-            _checkOut = checkin.AddDays(days);
 
         }
-        public string Name
-        { 
-            get {return _name;}
-            set { _name = value; }
-        }
-        public DateTime CheckIn
-        {
-            get { return _checkIn; }
-            set { _checkIn = value; }
-        }
 
-        public DateTime CheckOut
-        {
-            get { return _checkOut; }
-            set { _checkOut = value; }
-        }
-        public int Days
-        {
-            get { return _days; }
-            set { _days = value; }
-        }
-        public void BookingInfo()
-        {
-            Console.WriteLine($"Guest name : {_days}");
-            Console.WriteLine($"Check in Date: {_checkIn}");
-            Console.WriteLine($"You will checkout: {_checkOut}");
-        }
-        public Tuple<string, DateTime, int> GetUserInfo()
+        static void BookingWriter(List<Tuple<Person, Booking>> list)
         {
             
-            Console.WriteLine("Ange ditt för och efternamn:");
-            string name = Console.ReadLine();
-            DateTime test1;
-            while (true)
+            Console.WriteLine("Visar Samtliga bokningar Namn - Incheckning - Utcheckning");
+            for (int i = 0; i < list.Count; i++)
             {
-                Console.WriteLine("Ange ankomstdatum : yyyy-mm-dd");
-                string test = Console.ReadLine();
-
+                // Hides "removed" bookings
+                if (list[i].Item2.CheckIn < Convert.ToDateTime("0003-01-01"))
+                    continue;
                 
-                if (!DateTime.TryParse(test, out test1) || test1 < DateTime.Now)
-                {
-                    Console.WriteLine("Rätt format kekw eller fel datums");
-                    continue;
-                }
-                break;
+                Console.WriteLine($"[{i + 1}] Namn : {list[i].Item1.PName} - {list[i].Item2.CheckIn.ToShortDateString()}" +
+                    $" - {list[i].Item2.CheckOut.ToShortDateString()} ");
             }
-            int dayz;
-            while (true)
-            { 
-                Console.WriteLine("Hur många dagar ska du stanna?");
-                string days = Console.ReadLine();
-                if (!int.TryParse(days, out dayz) || dayz < 0)
-                {
-                    Console.WriteLine("Ge mig ett positivt heltal");
-                    continue;
-                }
-                break;
-            }
-            Tuple<string,DateTime,int> array = Tuple.Create(name, test1, dayz);
-            
 
-            return array;
         }
 
+        static void BookEditor(Booking bokning)
+        {
+            Console.WriteLine("Vill du: ");
+            Console.WriteLine("[1]Ändra bokning");
+            Console.WriteLine("[2]Avboka");
+            Console.WriteLine("[3]Återgå till bokningslista");
+            int.TryParse(Console.ReadLine(), out int choice);
+            switch (choice)
+            {
+                case 1:
+                    bokning.UpdateStayDate();
+                    bokning.UpdateCheckInDate();
+                    Console.WriteLine("Bekräftelse ändring, summering uppgifter:\n ");
+                    bokning.BookingInfo();
+                    Console.ReadLine();
+                    break;
+                case 2:
+                    Console.WriteLine($"Avboka : \n");
+                    bokning.BookingInfo();
+                    Console.WriteLine("Skriv DEL för att ta bort");
+                    string answer = Console.ReadLine();
+                    if (answer == "DEL")
+                    {
+                        bokning.BookingClear();
+                    }
+                    Console.WriteLine("Bokningen har tagits bort");
+                    break;
+
+                case 3:
+                    break;
+
+
+            }
+        }
+
+        
+
     }
+  
+
 }
+
