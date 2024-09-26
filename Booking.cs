@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 public class Booking : Person
 {
@@ -66,14 +67,20 @@ public class Booking : Person
             _days = value;
         }
     }
-    public void BookingInfo(Person person)
+    
+    //Filtering out all bookings with startdates below 0003 this way it will not show up. Cant figure out how to fully delete booking class.
+    public void BookingClear()
+    {
+        CheckIn = Convert.ToDateTime("0002-01-01");
+    }
+    public void BookingInfo()
     {
 
         Console.WriteLine($"Guest name : {_name}");
         Console.WriteLine($"Check in Date: {_checkIn.ToShortDateString()}");
         Console.WriteLine($"Checkout Date: {_checkOut.ToShortDateString()}");
         Console.WriteLine($"Total Price: {PricePerDay * _days} kr");
-        Console.WriteLine($"\nKontaktuppgifter\nNamn: {person.PName} \nMejladress: {person.Email} \nTelefonnummer: {person.Phone} ");
+        Console.WriteLine($"\nKontaktuppgifter\nNamn: {Name} \nMejladress: {Email} \nTelefonnummer: {Phone} ");
     }
     public void GetBookingInfo(Person person)
     {
@@ -114,6 +121,14 @@ public class Booking : Person
         _totalPrice = PricePerDay * dayz;
        // Console.WriteLine("Summering av bokning:");
         //BookingInfo();
+    }
+
+    public void UpdateCheckInDate()
+    {
+        Console.WriteLine("Vilken dag vill du checka in?");
+        string answer = Console.ReadLine();
+        DateTime.TryParse(answer, out DateTime Answer);
+        CheckIn = Answer;
     }
 
     //method for updating length of stay
